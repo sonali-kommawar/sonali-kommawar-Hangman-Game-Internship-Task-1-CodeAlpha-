@@ -1,0 +1,57 @@
+import random
+from IPython.display import display, HTML
+
+def hangman_game():
+    # Changed from {} to [] to create a list of dictionaries
+    word_list = [
+    {"word": "apple", "hint": "It's a red or green fruit often associated with doctors 🍏"},
+    {"word": "mango", "hint": "A sweet tropical fruit, known as the 'king of fruits' 🥭"},
+    {"word": "grape", "hint": "Small round fruit, comes in green or purple, used to make wine 🍇"},
+    {"word": "peach", "hint": "Soft and fuzzy fruit, often pinkish-orange 🍑"},
+    {"word": "banana", "hint": "Long yellow fruit that's rich in potassium 🍌"},
+    {"word": "python", "hint": "A popular programming language"},
+    {"word": "elephant", "hint": "The largest land animal"},
+    {"word": "planet", "hint": "A large celestial body orbiting a star"},
+    {"word": "guitar", "hint": "A musical instrument with strings"},
+    {"word": "oxygen", "hint": "Essential gas for human breathing"},
+
+    ]
+
+    # random.choice will now return a dictionary from the list
+    chosen_item = random.choice(word_list)
+    word = chosen_item["word"] # Extract the word
+    hint = chosen_item["hint"] # Extract the hint
+
+    guessed = ['_'] * len(word)
+    used_letters = []
+    attempts = 6
+
+    display(HTML("<h2 style='color:purple;'>🎯 Welcome to Hangman Game!</h2>"))
+    display(HTML(f"<p style='color:green;'>Hint: <b>{hint}</b></p>"))
+
+    while attempts > 0 and '_' in guessed:
+        display(HTML(f"<h3>Word: {' '.join(guessed)}</h3>"))
+        # Corrected the display of used letters to join them with commas
+        display(HTML(f"<p>Used Letters: {', '.join(used_letters)}</p>"))
+        letter = input("Enter a letter: ").lower()
+
+        if letter in used_letters:
+            display(HTML("<p style='color:orange;'>⚠️ Letter already used!</p>"))
+            continue
+
+        used_letters.append(letter)
+        if letter in word:
+            for i, l in enumerate(word):
+                if l == letter:
+                    guessed[i] = letter
+            display(HTML("<p style='color:green;'>✅ Correct Guess!</p>"))
+        else:
+            attempts -= 1
+            display(HTML(f"<p style='color:red;'>❌ Wrong! Attempts left: {attempts}</p>"))
+
+    if '_' not in guessed:
+        display(HTML(f"<h2 style='color:green;'>🎉 You Won! The word was '<b>{word}</b>'</h2>"))
+    else:
+        display(HTML(f"<h2 style='color:red;'>💀 You Lost! The word was '<b>{word}</b>'</h2>"))
+
+hangman_game()
